@@ -29,8 +29,11 @@ mongoose.connection.on("connected", () => {
     console.log(`Connected to MongoDB ${mongoose.connection.name}.`);
   });
 
+  app.get("/", async  (req, res) => {
+      res.render("index.ejs");
+  });
 
-  const Fruit = require("./models/fruit.js");
+const Fruit = require("./models/fruit.js");
 
 app.use(express.urlencoded({ extended: false }));
 
@@ -42,38 +45,37 @@ app.post("/fruits", async (req, res) => {
     }
 
     await Fruit.create(req.body);
-    res.redirect("/fruits/new");
+    res.redirect("/fruits");
     // console.log(req.body);//
 });
 
 // //app for all routes//
 
 app.get("/fruits", async (req, res) => {
-    // const allFruits = await Fruit.find();
-    // res.render("fruits/index.ejs", { fruits: allFruits });
-    res.send("welcome to the fruits index page")
+    const allFruits = await Fruit.find();
+    res.render("fruits/index.ejs", { fruits: allFruits });
+    // res.send("Welcome to the fruits index page")
+    // console.log(allFruits);
 }) 
 
-app.get("/", async  (req, res) => {
-    res.render("index.ejs");
-});
 
 
 app.get("/fruits/new", (req,res) => {
     res.render("fruits/new.ejs");
 });
 
-// app.get("/fruits/:fruitID", async (req, res) => {
-//     const foundFruit = await Fruit.findById(req.params.fruitId);
-//     // res.send(`this route render the show page for fruit id: ${req.params.fruitID} `);
-//     res.render("fruits/show.ejs", { fruit: founfFruit });
-// });
+app.get("/fruits/:fruitId", async (req, res) => {
+    const foundFruit = await Fruit.findById(req.params.fruitId);
+    //  res.send(`This route render the show page for fruit id: ${req.params.fruitID} `);
+    res.render("fruits/show.ejs", { fruit: foundFruit });
+});
 
 
-// app.delete("/fruits/:fruitID", async (req, res) => {
-//     await frit.findByIdAndDelete(req.params.fruitID);
-//     res.redirect("/fruit");
-// });
+app.delete("/fruits/:fruitId", async (req, res) => {
+    await Fruit.findByIdAndDelete(req.params.fruitId);
+    res.redirect("/fruits");
+    // res.send("This is the delete route");
+});
 
 // app.put("/fruits/:fruitId", async (req, res) => {
 //     // Handle the "isReadyToEat" checkbox data
