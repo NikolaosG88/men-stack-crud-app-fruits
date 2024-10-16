@@ -13,6 +13,7 @@ const morgan = require("morgan"); //new
 app.use(express.urlencoded({ extended: false }));
 app.use(methodOverride("_method")); // new
 app.use(morgan("dev")); //new
+app.use(express.urlencoded({ extended: false }));
 
 // routes below
 
@@ -31,11 +32,11 @@ mongoose.connection.on("connected", () => {
 
   app.get("/", async  (req, res) => {
       res.render("index.ejs");
+    // res.send("hello, friend!");
   });
 
 const Fruit = require("./models/fruit.js");
 
-app.use(express.urlencoded({ extended: false }));
 
 app.post("/fruits", async (req, res) => {
     if (req.body.isReadyToEat ==="on") {
