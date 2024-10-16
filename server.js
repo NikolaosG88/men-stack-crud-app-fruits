@@ -77,20 +77,31 @@ app.delete("/fruits/:fruitId", async (req, res) => {
     // res.send("This is the delete route");
 });
 
-// app.put("/fruits/:fruitId", async (req, res) => {
-//     // Handle the "isReadyToEat" checkbox data
-//     if (req.body.isReadyToEat === "on") {
-//       req.body.isReadyToEat = true;
-//     } else {
-//       req.body.isReadyToEat = false;
-//     }
-    
-//     // Update the fruit in the database
-//     await Fruit.findByIdAndUpdate(req.params.fruitId, req.body);
+// GET localhost:3000/fruits/:fruitId/edit
+app.get("/fruits/:fruitId/edit", async (req, res) => {
+    const foundFruit = await Fruit.findById(req.params.fruitId);
+    res.render("fruits/edit.ejs", {
+        fruit: foundFruit,
+      });
+    // console.log(foundFruit);
+    // res.send(`This is the edit route for ${foundFruit.name}`);
+  });
   
-//     // Redirect to the fruit"s show page to see the updates
-//     res.redirect(`/fruits/${req.params.fruitId}`);
-//   });
+
+app.put("/fruits/:fruitId", async (req, res) => {
+    // Handle the "isReadyToEat" checkbox data
+    if (req.body.isReadyToEat === "on") {
+      req.body.isReadyToEat = true;
+    } else {
+      req.body.isReadyToEat = false;
+    }
+    
+    // Update the fruit in the database
+    await Fruit.findByIdAndUpdate(req.params.fruitId, req.body);
+  
+    // Redirect to the fruit"s show page to see the updates
+    res.redirect(`/fruits/${req.params.fruitId}`);
+  });
 
 
 //____________________________________________//
